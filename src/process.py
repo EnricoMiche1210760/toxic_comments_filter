@@ -3,6 +3,8 @@ import spacy
 import os
 import numpy as np
 import pandas as pd
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 def load_dictionary(dict_name, lang, tokenizer, stopword=False):
     try:
@@ -43,3 +45,21 @@ def preprocess_text_and_store(text, doc_store=None, store=False, path='data/', e
 
     return preprocessed_text
 
+def get_sequences(train_data, val_data, test_data, num_words=1000, verbose=1):
+    tokenizer = Tokenizer(num_words=num_words)
+    tokenizer.fit_on_texts(train_data)
+    if verbose:
+        print(f"Words number: {tokenizer.word_counts}")
+    train_data = tokenizer.texts_to_sequences(train_data)
+    test_data  = tokenizer.texts_to_sequences(test_data)
+    val_data   = tokenizer.texts_to_sequences(val_data)
+    vocab_size = len(tokenizer.word_index) + 1
+    if verbose:
+        print(f"Vocabulary size: {vocab_size}")
+    maxlen = len(max(train_data, key=len))
+    train_data = pad_sequences(train_data, maxlen=maxlen)
+    test_data = pad_sequences(test_data, maxlen=maxlen)
+    val_data = pad_sequences(val_data, maxlen=maxlen)
+    if verbose:
+        print(f"Pre-padded sequences: {train_data[0:5]}")
+    return train_data, val_data, test_data, vocab_size, maxlen      
