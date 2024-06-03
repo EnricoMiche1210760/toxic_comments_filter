@@ -1,7 +1,7 @@
 import tensorflow as tf
-from tensorflow.keras.layers import Conv1D, Bidirectional, MaxPooling1D
+from tensorflow.keras.layers import Conv1D, Bidirectional, MaxPooling1D, Flatten, Embedding,\
+      LSTM, Dense, Dropout, GlobalMaxPool1D, GRU, SimpleRNN, Dropout, BatchNormalization
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Embedding, LSTM, Dense, Dropout, GlobalMaxPool1D, GRU, SimpleRNN, Dropout
 
 class EarlyStopping(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs):
@@ -94,10 +94,11 @@ def CNN_model_2(vocab_size, maxlen, dense_units=1, activation='softmax'):
     model = Sequential()
     model.add(Embedding(input_dim = vocab_size, output_dim=256, input_length=maxlen))
     model.add(Dropout(0.8))
-    model.add(Conv1D(filters=128, kernel_size=3, padding='same', activation='relu'))
+    model.add(Conv1D(filters=64, kernel_size=3, padding='same', activation='relu'))
+    model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=2))
-    model.add(LSTM(units=128))
+    model.add(LSTM(units=64))
     model.add(Dropout(0.65))
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(dense_units, activation=activation))
     return model
