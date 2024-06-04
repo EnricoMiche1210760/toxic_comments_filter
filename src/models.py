@@ -98,7 +98,8 @@ def CNN_model_2(vocab_size, maxlen, dense_units=1, activation='softmax'):
     model.add(BatchNormalization())
     model.add(MaxPooling1D(pool_size=2))
     model.add(LSTM(units=64))
-    model.add(Dropout(0.65))
+    model.add(Dropout(0.6))
+    model.add(Flatten())
     model.add(Dense(128, activation='relu'))
     model.add(Dense(dense_units, activation=activation))
     return model
