@@ -26,15 +26,15 @@ def load_dictionary(dict_name, lang, tokenizer, stopword=False):
         nltk.download(tokenizer)
     return nlp, eng_stopwords
 
-def preprocess_text_and_store(text, doc_store=None, store=False, path='data/', eng_stopwords=None, nlp=None, COLAB=False):
+def preprocess_text_and_store(text, doc_store=None, store=False, path='data/', eng_stopwords=None, nlp=None, COLAB=False, word_min_len=3):
     preprocessed_text = np.empty(len(text), dtype=object)
     if doc_store is None or doc_store not in os.listdir(path):
         counter = 0
         for i in range(len(text)):
             process_words = []
             text[i] = text[i].replace('\d', ' ')
-            for word in nltk.word_tokenize(nlp(text[i].lower()).text):
-                if word.isalpha() and word not in eng_stopwords and len(str(word)) >= 3:
+            for word in nltk.word_tokenize(nlp(text[i].lower()).lemma_):
+                if word.isalpha() and word not in eng_stopwords and len(str(word)) >= word_min_len:
                     process_words.append(word)
             preprocessed_text[counter] = ' '.join(process_words)
             counter += 1
