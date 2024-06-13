@@ -4,37 +4,83 @@ from tensorflow.keras.layers import Conv1D, Bidirectional, MaxPooling1D, Flatten
 from tensorflow.keras import Sequential
 
 class EarlyStopping(tf.keras.callbacks.Callback):
+    '''
+    Stop training when a monitored quantity has stopped improving.
+    '''
     def on_epoch_end(self, epoch, logs):
+        '''
+        Called at the end of an epoch. 
+        Args:
+            epoch: Integer, index of epoch.
+            logs: Dict, metric results for this training epoch, and for the validation epoch if validation is performed.
+        '''
         if logs['val_accuracy'] > 0.97 and epoch > 3:
             self.model.stop_training = True
-            print('\nStop training at epoch:', epoch+1)
+            print(f'\nStop training at epoch: {epoch+1}\n')
 
 class BatchLogger(tf.keras.callbacks.Callback):
+    '''
+    Callback that logs metrics at the end of each batch.
+    '''
     def on_batch_end(self, batch_number, logs):
+        '''
+        Called at the end of a batch.
+        Args:
+            batch_number: Integer, index of batch within the current epoch.
+            logs: Dict, metric results for this batch.
+        '''
         if batch_number % 150 == 0:
             self.batch_loss.append(logs['loss'])
             self.batch_accuracy.append(logs['accuracy'])
     def on_train_begin(self, *args, **kwargs):
+        '''
+        Called at the beginning of training.
+        Defines the attributes to store the loss and accuracy of each batch.
+        '''
         self.batch_loss = []
         self.batch_accuracy = []
 
 
 class F1Score(tf.keras.metrics.Metric):
+    '''
+    Computes the F1 Score.
+    '''
     def __init__(self, name='f1_score', **kwargs):
+        '''
+        Initializes the instance attributes.
+        Args:
+            name: String, name of the metric instance.
+            **kwargs: Arbitrary keyword arguments.
+        '''
         super(F1Score, self).__init__(name=name, **kwargs)
         self.precision = tf.keras.metrics.Precision()
         self.recall = tf.keras.metrics.Recall()
 
     def update_state(self, y_true, y_pred, sample_weight=None):
+        '''
+        Accumulates the confusion matrix.
+        Args:
+            y_true: Ground truth values. shape = [batch_size, d0, .. dN].
+            y_pred: The predicted values. shape = [batch_size, d0, .. dN].
+            sample_weight: Optional sample_weight acts as a coefficient for the loss. shape = [batch_size].
+        '''
         self.precision.update_state(y_true, y_pred, sample_weight)
         self.recall.update_state(y_true, y_pred, sample_weight)
 
     def result(self):
+        '''
+        Computes and returns the F1 Score.
+        Returns:
+            F1 Score: Float.
+        '''
         precision = self.precision.result()
         recall = self.recall.result()
         return 2 * ((precision * recall) / (precision + recall + tf.keras.backend.epsilon()))
 
     def reset_states(self):
+        '''
+        Resets all of the metric state variables.
+        '''
         self.precision.reset_states()
         self.recall.reset_states()
 
