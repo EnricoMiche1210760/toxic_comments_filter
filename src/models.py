@@ -88,6 +88,14 @@ class F1Score(tf.keras.metrics.Metric):
 
 @tf.keras.saving.register_keras_serializable()#senza specificare un paramentro, sovvrascrive loss
 def weighted_binary_crossentropy(w0, w1):
+    '''
+    Computes the weighted binary crossentropy loss.
+    Args:
+        w0: Float, weight for the positive class.
+        w1: Float, weight for the negative class.
+    Returns:
+        loss: Function, weighted binary crossentropy loss function.
+    '''
     def loss(y_true, y_pred):
         y_true = tf.cast(y_true, tf.float32)
         y_pred = tf.clip_by_value(y_pred, 1e-7, 1-1e-7)
@@ -99,6 +107,16 @@ def weighted_binary_crossentropy(w0, w1):
 
 
 def LSTM_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
+    '''
+    LSTM model
+    Args:
+        vocab_size: int, vocabulary size
+        maxlen: int, maximum length of the sequences
+        dense_units: int, number of units in the dense layer
+        activation: str, activation function for the output layer
+    Returns:
+        model: keras.Sequential, LSTM model
+    '''
     model = Sequential()
     model.add(Embedding(input_dim = vocab_size, output_dim=150, input_length=maxlen))
     model.add(Dropout(0.65)) #avoid overfitting
@@ -109,6 +127,16 @@ def LSTM_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
     return model
 
 def GRU_RNN_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
+    '''
+    GRU RNN model
+    Args:
+        vocab_size: int, vocabulary size
+        maxlen: int, maximum length of the sequences
+        dense_units: int, number of units in the dense layer
+        activation: str, activation function for the output layer
+    Returns:
+        model: keras.Sequential, GRU RNN model
+    '''
     model = Sequential()
     model.add(Embedding(input_dim = vocab_size, output_dim=100, input_length=maxlen))
     model.add(Dropout(0.85))
@@ -124,6 +152,16 @@ def GRU_RNN_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
     return model
 
 def CNN_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
+    '''
+    CNN model
+    Args:
+        vocab_size: int, vocabulary size
+        maxlen: int, maximum length of the sequences
+        dense_units: int, number of units in the dense layer
+        activation: str, activation function for the output layer
+    Returns:
+        model: keras.Sequential, CNN model
+    '''
     model = Sequential()
     model.add(Embedding(input_dim = vocab_size, output_dim=150, input_length=maxlen))
     model.add(Dropout(0.75))
@@ -137,6 +175,16 @@ def CNN_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
     return model
 
 def CNN_model_2(vocab_size, maxlen, dense_units=1, activation='softmax'):
+    '''
+    CNN model
+    Args:
+        vocab_size: int, vocabulary size
+        maxlen: int, maximum length of the sequences
+        dense_units: int, number of units in the dense layer
+        activation: str, activation function for the output layer
+    Returns:
+        model: keras.Sequential, CNN model
+    '''
     model = Sequential()
     model.add(Embedding(input_dim = vocab_size, output_dim=256, input_length=maxlen))
     model.add(Dropout(0.8))
