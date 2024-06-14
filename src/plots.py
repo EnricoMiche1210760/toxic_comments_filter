@@ -4,11 +4,32 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
 def show_number(plot, barplot):
+    '''
+    Function to show the number on top of the bars in a barplot
+    Parameters:
+        plot: matplotlib.pyplot, plot to show the numbers
+        barplot: matplotlib.bar, barplot to show the numbers
+    '''
     for i in range(len(barplot)):
         height = barplot[i].get_height()
         plot.text(barplot[i].get_x() + barplot[i].get_width()/2, height, height, ha='center', va='bottom')
 
-def plot_bar(columns, rows, figsize=(8,5), title:str=None, xlabel:str=None, ylabel:str=None, color='blue', xticks_settings=None, yticks_settings=None):
+def plot_bar(columns, rows, figsize=(8,5), 
+             title:str=None, xlabel:str=None, ylabel:str=None, color='blue',
+             xticks_settings=None, yticks_settings=None):
+    '''
+    Function to plot a barplot
+    Parameters:
+        columns: list, list of columns
+        rows: list, list of rows
+        figsize: tuple, size of the figure
+        title: str, title of the plot
+        xlabel: str, x-axis label
+        ylabel: str, y-axis label
+        color: str, color of the bars
+        xticks_settings: dict, settings for the x-ticks
+        yticks_settings: dict, settings for the y-ticks
+    '''
     plt.figure(figsize=figsize)
     barplot = plt.bar(columns, rows, color=color)
     plt.yticks(**yticks_settings)
@@ -24,6 +45,13 @@ def plot_bar(columns, rows, figsize=(8,5), title:str=None, xlabel:str=None, ylab
 
 
 def plot_stats(dataframe, categories, data):
+    '''
+    Function to plot the statistics of the data
+    Parameters:
+        dataframe: pd.DataFrame, dataframe to be used for plotting
+        categories: list, list of categories
+        data: list, list of sentences
+    '''
     axes = []
     fig, axes = plt.subplots(2, 3, figsize=(15,10))
 
@@ -44,6 +72,13 @@ def plot_stats(dataframe, categories, data):
     plt.show();
 
 def print_confusion_matrix(y_test, y_pred, columns):
+    '''
+    Function to print the confusion matrix
+    Parameters:
+        y_test: np.array, true labels
+        y_pred: np.array, predicted labels
+        columns: list, list of columns
+    '''
     fig, axes = plt.subplots(2, 3, figsize=(18, 9))
     print(columns)
     for i, col in enumerate(columns):
@@ -59,6 +94,14 @@ def print_confusion_matrix(y_test, y_pred, columns):
     plt.show();
 
 def plot_training_stats(train_loss, val_loss, train_acc, val_acc):
+    '''
+    Function to plot the training statistics
+    Parameters:
+        train_loss: list, list of training loss
+        val_loss: list, list of validation loss
+        train_acc: list, list of training accuracy
+        val_acc: list, list of validation accuracy
+    '''
     fig, axes = plt.subplots(1, 2, figsize=(15,10))
     axes[0].plot(train_loss, label='train')
     axes[0].plot(val_loss, label='validation')
