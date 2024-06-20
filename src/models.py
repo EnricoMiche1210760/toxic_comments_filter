@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras.layers import Conv1D, Bidirectional, MaxPooling1D, Flatten, Embedding,\
       LSTM, Dense, Dropout, GlobalMaxPool1D, GRU, SimpleRNN, Dropout, BatchNormalization
 from tensorflow.keras import Sequential
@@ -86,7 +87,7 @@ class F1Score(tf.keras.metrics.Metric):
 
 
 
-@tf.keras.saving.register_keras_serializable()#senza specificare un paramentro, sovvrascrive loss
+@keras.saving.register_keras_serializable()#senza specificare un paramentro, sovvrascrive loss
 def weighted_binary_crossentropy(w0, w1):
     '''
     Computes the weighted binary crossentropy loss.
@@ -142,8 +143,6 @@ def GRU_RNN_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
     model.add(Dropout(0.85))
     model.add(GRU(units=100, return_sequences=True))
     model.add(Dropout(0.5))
-    model.add(GRU(units=100, return_sequences=True))
-    model.add(Dropout(0.35))
     model.add(SimpleRNN(units=50))
     model.add(Dropout(0.35))
     model.add(Dense(32, activation='relu'))
