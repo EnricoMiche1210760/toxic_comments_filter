@@ -102,7 +102,7 @@ def weighted_binary_crossentropy(w0, w1):
         y_pred = tf.clip_by_value(y_pred, 1e-7, 1-1e-7)
         _w0 = tf.constant(w0, dtype=tf.float32)
         _w1 = tf.constant(w1, dtype=tf.float32)
-        loss = -_w0 * y_true * tf.math.log(y_pred) - _w1 * (1 - y_true) * tf.math.log(1 - y_pred)
+        loss = -_w1 * y_true * tf.math.log(y_pred) - _w0 * (1 - y_true) * tf.math.log(1 - y_pred)
         return tf.reduce_mean(loss)
     return loss
 
