@@ -120,7 +120,7 @@ def LSTM_model(vocab_size, maxlen, dense_units=1, activation='softmax'):
     '''
     model = Sequential()
     model.add(Embedding(input_dim = vocab_size, output_dim=150, input_length=maxlen))
-    model.add(Dropout(0.65)) #avoid overfitting
+    model.add(Dropout(0.65))
     model.add(LSTM(units=50, return_sequences=True))
     model.add(GlobalMaxPool1D())
     model.add(Dropout(0.35))
